@@ -4,6 +4,7 @@ import MessageList from "./MessageList";
 import MessageType from "./MessageType";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { analyzeIngredients } from "../lib/analyzeIngredients";
+import { extractTextFromImage } from "../lib/extractTextFromImage";
 
 export default function Chat() {
   const [isDark, toggleDarkMode] = useDarkMode();
@@ -26,10 +27,19 @@ export default function Chat() {
   const updatedMessages = [...messages, userMsg];
   setMessages(updatedMessages);
   setIsTyping(true);
+  
+  let textInput = userInput;
+
+// If image is present, extract text
+if (imageAsset) {
+  setIsTyping(true);
+  const extractedText = await extractTextFromImage(imageAsset);
+  textInput = extractedText;
+}
 
   try {
     // --- Ingredient parsing (simple, conservative) ---
-    const ingredients = userInput
+    const ingredients = textInput
       .split(",")
       .map(i => i.trim())
       .filter(Boolean);
