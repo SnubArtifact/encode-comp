@@ -3,6 +3,7 @@ import { Moon, Sun } from "lucide-react";
 import MessageList from "./MessageList";
 import MessageType from "./MessageType";
 import { useDarkMode } from "../hooks/useDarkMode";
+import { analyzeIngredients } from "../lib/analyzeIngredients";
 
 export default function Chat() {
   const [isDark, toggleDarkMode] = useDarkMode();
@@ -14,33 +15,82 @@ export default function Chat() {
    * These come directly from the handleSubmit in MessageType.jsx
    */
   async function handleSend(userInput, imageAsset = null) {
-    // Prevent sending if both are empty
-    if (!userInput.trim() && !imageAsset) return;
+  if (!userInput.trim() && !imageAsset) return;
 
-    // 1. Create the User Message object
-    const userMsg = {
-      role: "user",
-      content: userInput,
-      image: imageAsset, // This stores the base64 string for display
+  const userMsg = {
+    role: "user",
+    content: userInput,
+    image: imageAsset,
+  };
+
+  const updatedMessages = [...messages, userMsg];
+  setMessages(updatedMessages);
+  setIsTyping(true);
+
+  try {
+    // --- Ingredient parsing (simple, conservative) ---
+    const ingredients = userInput
+      .split(",")
+      .map(i => i.trim())
+      .filter(Boolean);
+
+    // --- Call your Groq reasoning engine ---
+    const result = await analyzeIngredients(ingredients);
+
+    // --- Co-pilot style synthesis (NOT raw JSON dump) ---
+    const aiContent = `
+Inferred intent: ${result.inferred_intent.label}
+Confidence: ${(result.inferred_intent.confidence * 100).toFixed(0)}%
+
+${result.overall_assessment}
+
+${
+  result.primary_conflicts.length
+    ? `Alignment frictions:\n• ${result.primary_conflicts
+        .map(c => c.why_it_matters)
+        .join("\n• ")}`
+    : ""
+}
+
+${
+  result.secondary_tradeoffs.length
+    ? `\nTradeoffs:\n• ${result.secondary_tradeoffs
+        .map(t => t.explanation)
+        .join("\n• ")}`
+    : ""
+}
+
+${
+  result.uncertainty_notes.length
+    ? `\nUncertainty:\n• ${result.uncertainty_notes.join("\n• ")}`
+    : ""
+}
+`.trim();
+
+    const aiMsg = {
+      role: "assistant",
+      content: aiContent,
+      image: null,
     };
 
-    // 2. Update state with the user message
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
-    setIsTyping(true);
+    setMessages([...updatedMessages, aiMsg]);
+  } catch (err) {
+    console.error(err);
 
-    // 3. Simulate AI Response (Replace this with your actual API call)
-    setTimeout(() => {
-      const aiMsg = {
+    setMessages([
+      ...updatedMessages,
+      {
         role: "assistant",
-        content: "I've analyzed the ingredients. This product contains high levels of maltodextrin and artificial sweeteners. \n\nRecommendation: Consumption should be occasional.",
-        image: null, // AI usually sends back text, but could send images if needed
-      };
-      
-      setMessages([...updatedMessages, aiMsg]);
-      setIsTyping(false);
-    }, 1500);
+        content:
+          "I couldn’t reliably infer the product’s alignment from this input. More context or clearer ingredient patterns may be needed.",
+        image: null,
+      },
+    ]);
+  } finally {
+    setIsTyping(false);
   }
+}
+
 
   return (
     <div className={`flex flex-col h-screen w-full transition-colors duration-300 overflow-hidden relative ${isDark ? 'bg-[#0b0f1a]' : 'bg-gray-50'}`}>
