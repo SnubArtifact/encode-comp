@@ -1,7 +1,8 @@
 import Chat from './components/Chat.jsx'
 
 function App() {
-  return <Chat />
+  return
+   <Chat />
 }
 
 export default App
