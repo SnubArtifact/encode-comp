@@ -6,12 +6,13 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+export default {
+  theme: {
     extend: {
-      fontFamily: {
-        sans: ['Söhne', 'ui-sans-serif', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'Ubuntu', 'Cantarell', '"Noto Sans"', 'sans-serif'],
-        montserrat: ['Montserrat', 'ui-sans-serif', 'system-ui'],
-        sohne: ['Söhne', 'ui-sans-serif', 'system-ui'],
-      },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'fade-in': 'fadeIn 0.5s ease-in-out',
@@ -24,5 +25,4 @@ module.exports = {
       },
     },
   },
-  plugins: [],
 };
