@@ -17,6 +17,35 @@ BhojanBytes is designed to **reduce cognitive load**, not increase it.
 
 ---
 
+## Tech stack
+1. ### Frontend 
+React 19: The latest version of the React library for building the user interface.
+
+Vite 7: A lightning-fast development server and build tool.
+
+JavaScript (ESM): Modern ES modules for clean, modular code.
+
+2. ### Styling & UI
+Tailwind CSS 4.0: used for ultra-performant utility-first styling.
+
+Lucide React: High-quality, consistent SVG icons (Sparkles, Shield, Zap, etc.).
+
+Google Fonts (Montserrat): The primary typeface used throughout the application for a modern feel.
+
+3. ### Artificial Intelligence & Logic
+Groq Cloud API: Used to run high-speed inference for the reasoning engine.
+
+Llama-3.3-70b-versatile: The Large Language Model (LLM) powering the "Reasoning Engine" that analyzes ingredients.
+
+Tesseract.js: A high-performance OCR (Optical Character Recognition) library used to extract text from ingredient labels and images.
+
+4. ### Deployment & Infrastructure
+Vercel: Used for hosting, SSL management, and automated deployments from GitHub.
+
+Git/GitHub: For version control and source code management.
+
+---
+
 
 
 ##  Core Experience Flow
