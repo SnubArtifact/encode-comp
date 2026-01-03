@@ -38,7 +38,7 @@ export default function AnalysisCard({ data }) {
     const { inferred_intent, primary_conflicts, secondary_tradeoffs, overall_assessment, uncertainty_notes } = data;
 
     return (
-        <div className={`w-full scale-105 translate-y-4 max-w-3xl mx-auto !my-0 bg-[#0f172a]/70 backdrop-blur-3xl rounded-[1.2rem] overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] border border-white/10 font-sans transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-6 opacity-0 scale-[0.98]'}`}>
+        <div className={`w-full scale-105 translate-y-4 max-w-3xl mx-auto !my-0 bg-[#0f172a]/70 backdrop-blur-3xl rounded-[1.2rem] overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] border border-white/10  transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-6 opacity-0 scale-[0.98]'}`}>
 
             {/* --- HEADER --- */}
             <div className="animate-gradient bg-gradient-to-br from-indigo-900/40 via-violet-900/40 to-indigo-900/40 !p-3 lg:!p-5 relative overflow-hidden border-b border-white/5">
@@ -55,21 +55,12 @@ export default function AnalysisCard({ data }) {
                             </div>
                             <h2 className="text-[8px] font-black tracking-[0.3em] uppercase text-indigo-300/80">Intelligence Engine</h2>
                         </div>
-                        <p className="text-base md:text-lg lg:text-xl font-bold leading-tight text-white/95 font-serif italic tracking-tight underline decoration-indigo-500/30 underline-offset-[5px]">
+                        <p className="text-base md:text-lg lg:text-xl font-bold leading-tight text-white/95  italic tracking-tight underline decoration-indigo-500/30 underline-offset-[5px]">
                             "{overall_assessment}"
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-white/[0.04] backdrop-blur-2xl !p-3 lg:!pr-6 rounded-[1rem] border border-white/10 shrink-0 shadow-[0_8px_16px_rgba(0,0,0,0.2)] group hover:border-indigo-500/40 transition-all duration-500 hover:scale-[1.02]">
-                        <div className="pulse-halo h-12 w-12 bg-indigo-600 text-white rounded-[0.75rem] flex items-center justify-center shadow-[0_0_15px_rgba(79,70,229,0.2)] transition-transform group-hover:rotate-6">
-                            <span className="font-extrabold text-base">{(inferred_intent.confidence * 100).toFixed(0)}</span>
-                            <span className="text-[9px] ml-0.5 font-bold opacity-70">%</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-[9px] uppercase font-black tracking-[0.1em] text-indigo-300 mb-0.5">Confidence</span>
-                            <span className="font-black text-base text-white capitalize group-hover:text-indigo-200 transition-colors whitespace-nowrap">{inferred_intent.label.replace(/_/g, " ")}</span>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 

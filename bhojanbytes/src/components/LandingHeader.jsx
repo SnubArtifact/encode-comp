@@ -10,15 +10,15 @@ export default function LandingHeader() {
                     <div className="absolute inset-0 bg-indigo-400 blur-md opacity-20" />
                 </div>
                 <span className="text-[11px] font-black tracking-[0.2em] uppercase text-indigo-400/90">
-                    AI-Powered Analysis
+                    AI-Powered Reasoning
                 </span>
             </div>
 
             {/* Hero Text */}
             <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-[0.9] animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-                REASONING <br />
+                Bhojan
                 <span className="bg-gradient-to-r from-indigo-400 via-violet-200 to-indigo-400 bg-clip-text text-transparent italic">
-                    ENGINE.
+                    Bytes.
                 </span>
             </h1>
 
