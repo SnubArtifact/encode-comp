@@ -53,7 +53,7 @@ export default function AnalysisCard({ data }) {
                                 <Sparkles className="w-4 h-4 text-indigo-300 group-hover:scale-125 transition-transform duration-500" />
                                 <div className="absolute inset-0 bg-indigo-400 blur-lg opacity-40 animate-pulse" />
                             </div>
-                            <h2 className="text-[8px] font-black tracking-[0.3em] uppercase text-indigo-300/80">Intelligence Engine</h2>
+                            <h2 className="text-[8px] font-black tracking-[0.3em] uppercase text-indigo-300/80">BhojanBytes</h2>
                         </div>
                         <p className="text-base md:text-lg lg:text-xl font-bold leading-tight text-white/95  italic tracking-tight underline decoration-indigo-500/30 underline-offset-[5px]">
                             "{overall_assessment}"
