@@ -33,10 +33,10 @@ export default function MessageType({ onSend }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (!input.trim() && !imagePreview) return;
-    
+
     // Pass both text and image to the parent
     onSend(input, imagePreview);
-    
+
     setInput("");
     setImagePreview(null);
   }
@@ -56,22 +56,22 @@ export default function MessageType({ onSend }) {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="mb-1 p-3.5 rounded-2xl bg-white dark:bg-[#1a1f2e] border border-gray-200 dark:border-gray-800 text-gray-500 hover:text-indigo-500 transition-all flex-shrink-0 shadow-sm"
+          className="mb-1 p-2.5 rounded-xl bg-white dark:bg-[#1a1f2e] border border-gray-200 dark:border-gray-800 text-gray-500 hover:text-indigo-500 transition-all flex-shrink-0 shadow-sm"
         >
-          <Paperclip className="w-6 h-6 rotate-45" />
+          <Paperclip className="w-5 h-5 rotate-45" />
         </button>
 
         {/* 2. THE MAIN INPUT CONTAINER */}
-        <div className="flex-1 flex flex-col bg-white dark:bg-[#1a1f2e] border-2 border-gray-100 dark:border-gray-800 rounded-[28px] overflow-hidden focus-within:border-indigo-500/40 focus-within:ring-4 focus-within:ring-indigo-500/5 transition-all shadow-sm">
-          
+        <div className="flex-1 flex flex-col bg-white dark:bg-[#1a1f2e] border-2 border-gray-100 dark:border-gray-800 rounded-[22px] overflow-hidden focus-within:border-indigo-500/40 focus-within:ring-4 focus-within:ring-indigo-500/5 transition-all shadow-sm">
+
           {/* IMAGE PREVIEW AREA */}
           {imagePreview && (
             <div className="px-4 pt-4 animate-in fade-in zoom-in duration-300">
               <div className="relative inline-block group">
-                <img 
-                  src={imagePreview} 
-                  alt="Preview" 
-                  className="h-24 w-24 object-cover rounded-xl border-2 border-indigo-500/20" 
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="h-24 w-24 object-cover rounded-xl border-2 border-indigo-500/20"
                 />
                 <button
                   type="button"
@@ -96,7 +96,7 @@ export default function MessageType({ onSend }) {
               }
             }}
             placeholder="Describe the product or upload ingredients..."
-            className="w-full bg-transparent border-none focus:ring-0 text-[16px] py-4 px-6 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 resize-none max-h-[300px] overflow-y-auto leading-relaxed"
+            className="w-full bg-transparent border-none focus:ring-0 text-[15px] py-3 px-5 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 resize-none max-h-[300px] overflow-y-auto leading-relaxed"
           />
         </div>
 
@@ -104,13 +104,12 @@ export default function MessageType({ onSend }) {
         <button
           type="submit"
           disabled={!input.trim() && !imagePreview}
-          className={`mb-1 p-4 rounded-2xl transition-all flex-shrink-0 ${
-            input.trim() || imagePreview
-              ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-105" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-300 dark:text-gray-600 cursor-not-allowed"
-          }`}
+          className={`mb-1 p-2.5 rounded-xl transition-all flex-shrink-0 ${input.trim() || imagePreview
+            ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-105"
+            : "bg-gray-100 dark:bg-gray-800 text-gray-300 dark:text-gray-600 cursor-not-allowed"
+            }`}
         >
-          <ArrowUp className="w-6 h-6 stroke-[3px]" />
+          <ArrowUp className="w-5 h-5 stroke-[3px]" />
         </button>
       </form>
     </div>

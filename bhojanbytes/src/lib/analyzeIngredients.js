@@ -151,69 +151,97 @@ STRICT OUTPUT RULES:
 OUTPUT FORMAT:
 Return ONLY valid JSON in this structure:
 
-{{
-  "inferred_intent": {{
+{
+  "inferred_intent": {
     "label": "",
     "confidence": 0.0,
     "reasoning": []
-  }},
+  },
   "primary_conflicts": [
-    {{
+    {
       "ingredient": "",
       "risk_level": "low | medium | high",
       "why_it_matters": ""
-    }}
+    }
   ],
   "secondary_tradeoffs": [
-    {{
+    {
       "ingredient": "",
       "explanation": ""
-    }}
+    }
   ],
   "overall_assessment": "A single, synthesized paragraph of human-level insight that acts as the co-pilot's voice.",
   "uncertainty_notes": []
-}}
+}
 
 INGREDIENTS:
 ${ingredients.join(", ")}
 `;
 
-  const response = await fetch(
-    "https://api.groq.com/openai/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        messages: [
-          {
-            role: "system",
-            content: "You are a strict, non-causal reasoning engine. Alignment only."
+  const MAX_RETRIES = 2;
+  let lastError = null;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await fetch(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
+            "Content-Type": "application/json",
           },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.1,
-      }),
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: [
+              {
+                role: "system",
+                content: "You are a strict, non-causal reasoning engine. Alignment only. Output valid JSON only."
+              },
+              {
+                role: "user",
+                content: prompt
+              }
+            ],
+            temperature: 0.1,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Groq API error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.choices || !data.choices.length) {
+        throw new Error("Invalid Groq response structure");
+      }
+
+      let rawOutput = data.choices[0].message.content;
+
+      // Robust JSON Cleanup
+      // 1. Remove markdown code blocks ```json ... ```
+      rawOutput = rawOutput.replace(/```json/g, "").replace(/```/g, "");
+      // 2. Trim whitespace
+      rawOutput = rawOutput.trim();
+
+      try {
+        return JSON.parse(rawOutput);
+      } catch (parseError) {
+        console.warn(`JSON Parse failed on attempt ${attempt + 1}. Output was:`, rawOutput);
+        throw new Error("Model did not return valid JSON");
+      }
+
+    } catch (err) {
+      console.error(`Attempt ${attempt + 1} failed:`, err);
+      lastError = err;
+      // Wait a short bit before retrying, if not last attempt
+      if (attempt < MAX_RETRIES) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
     }
-  );
-
-  const data = await response.json();
-
-  if (!data.choices || !data.choices.length) {
-    throw new Error("Invalid Groq response");
   }
 
-  const rawOutput = data.choices[0].message.content;
-
-  try {
-    return JSON.parse(rawOutput);
-  } catch {
-    throw new Error("Model did not return valid JSON");
-  }
+  throw lastError || new Error("Failed to analyze ingredients after multiple attempts.");
 }
